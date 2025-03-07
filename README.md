@@ -1,27 +1,43 @@
-# Sample Game Unit Test Application
-[![license](https://img.shields.io/badge/license-MIT-green)](https://github.com/scttzth/node-js-game-app-unit-tests/blob/main/LICENSE)
+# Nodejs app with rest and graphql example
 
-This sample application is an example Node JS application to demonstrate CICD build capabilities inside AWS CodeBuild
+An example of GraphQL queries/mutations with Node and Express js.
 
-## Installing the Dependencies
+With GraphQL, clients can specify exactly what data they need, and the server responds with only that data, reducing the amount of data transferred over the network.
 
-Install Node.js and use the following command to install the dependencies:
+Rest API Endpoint for get all users: http://localhost:5000/rest/getAllUsers
 
-```
-npm install
-```
+GraphQL Endpont: http://localhost:5000/graphql
 
-## Running the Sample Unit Tests
+Query for below scenarios: 
 
-```
-npm test
-```
+1. Get All Users with query operation
 
-## Release Notes
-### Release 1.0.0
+query{
+  getAllUsers{
+    id
+    email
+  }
+}
 
-* Create sample unit tests
+2. Get single user details
 
-## License
+query{
+  findUserById(id:1000){
+    id
+    firstName
+    lastName
+    email
+  }
+}
 
-This library is licensed under [the MIT-0 License](https://github.com/aws/mit-0).
+3. Create User with mutation operation
+
+mutation{
+  createUser(firstName:"sachin",lastName:"purohit",email:"sachin@sachin.com",password:"password"){
+    id
+    firstName
+    lastName
+    email
+  }
+}
+

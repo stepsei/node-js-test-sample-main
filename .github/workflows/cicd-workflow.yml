@@ -1,25 +1,29 @@
 
 name: CI/CD Pipeline
-on: push
+on: 
+  push:
+    branches:  [cicd-docker-ec2]
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout source
-              uses: actions/checkout@v3
-            - name: Login to docker hub
-              run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
-            - name: Build docker image
-              run: docker build -t stepsei1/step-app .
-            - name: Publish image to docker hub
-              run: docker push stepsei1/step-app:latest
-    deploy:
-        needs: build
-        runs-on: [aws-ec2]
-        steps:
-            - name: Pull image from docker hub
-              run: docker pull stepsei1/step-app:latest
-            - name: Delete old container
-              run: docker rm -f nodejs-app-container
-            - name: Run docker container
-              run: docker run -d -p 5000:5000 --name nodejs-app-container stepsei1/step-app
+  build:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} 
+      - name: Build docker image
+        run: docker build -t stepsei1/node-js-test-sample-main . #docker username and project directory
+      - name: Publish image to docker hub
+        run: docker push stepsei1/node-js-test-sample-main:latest
+
+  deploy:
+    needs: build
+    runs-on: [aws-ec2]
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull stepsei1/node-js-test-sample-main:latest
+      - name: Delete old container
+        run: docker rm -f nodejs-app-container
+      - name: Run docker container
+        run: docker run -d -p 5000:5000 -name nodejs-app-container stepsei1/node-js-test-sample-main
